@@ -19,7 +19,7 @@ public class CLI {
             }
 
             return input;
-        }catch (InputMismatchException exception){//testing for data types outside of int
+        } catch (InputMismatchException exception) {//testing for data types outside of int
             System.out.println("Incorrect input! Please provide a number and try again.");
             scanner.nextLine();
             return getInt(min, max);
@@ -30,9 +30,33 @@ public class CLI {
         }
     }
 
-    public String getString(String input) {
-        if(input == " ") System.out.println("Your input cannot be empty! Please try again.");
+    public int getInt() {
+        int input = scanner.nextInt();
+        return input;
+    }
 
+
+    public String getString(String input) {
+        try {
+            System.out.print("Input: ");
+            String userInput = scanner.nextLine().trim();
+
+            if (userInput == " ") System.out.println("Your input cannot be empty! Please try again.");
+            return getString(input);
+
+        } catch (InputMismatchException exception) {
+            System.out.println("Incorrect input! Please provide a word or phrase and try again.");
+            scanner.nextLine();
+            return getString(input);
+        } catch (Exception exception) {
+            System.out.println("An unknown error appeared.");
+            scanner.nextLine();
+            return getString(input);
+        }
+    }
+
+    public String getString() {
+        String input = scanner.nextLine();
         return input;
     }
 
