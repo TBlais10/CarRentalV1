@@ -25,18 +25,15 @@ public class Menu {
             }
 
             System.out.println("Please choose the car you wish to rent!");
-            int selection = userInput.getInt(1, 5);
+            int selection = userInput.getInt(1, arrList.size());
 
             for (int i = 0; i < arrList.size(); i++) {
                 if (selection - 1 == i) {
-                    System.out.println("\n---\nThank you for choosing the " + arrList.get(i) + "! Safe Travels!\n---");
-                    //new Math().rentedTotal(selection - 1);
+                    //System.out.println("\n---\nThank you for choosing the " + arrList.get(i) + "! Safe Travels!\n---");
+                    rentedTotal(i); //For asking customer how long they wish to rent the car for and what the total cost will be.
                     rented.add(arrList.get(i));
                     arrList.remove(i);
                     run();
-                }
-                else{
-                    System.out.println("Current selection is not an option. Please try again.");
                 }
 
             }
@@ -57,6 +54,15 @@ public class Menu {
         } else {
             new CLI().exit();
         }
+    }
+
+    private void rentedTotal(int i){
+        System.out.println(i);
+        System.out.println("\n---\nThank you for choosing the " + arrList.get(i) + "! The price per day is " + arrList.get(i).getPrice() + ". How many days do you wish to rent it?\n---");
+        int input = userInput.getInt();
+        int total = input * arrList.get(i).getPrice();
+        System.out.println("\n---\n For a " + input + " day rental the " + arrList.get(i) + "will cost a total of "  + total + "! Safe Travels!\n---");
+
     }
 
 }

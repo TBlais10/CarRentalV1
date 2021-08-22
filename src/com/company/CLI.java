@@ -35,6 +35,7 @@ public class CLI {
     }
 
     public int getInt() {
+        System.out.print("Input: ");
         int input = scanner.nextInt();
         return input;
     }
