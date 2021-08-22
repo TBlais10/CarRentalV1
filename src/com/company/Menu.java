@@ -26,21 +26,23 @@ public class Menu {
 
             System.out.println("Please choose the car you wish to rent!");
             int selection = userInput.getInt(1, 5);
-            userInput.scanner.nextLine();
 
             for (int i = 0; i < arrList.size(); i++) {
                 if (selection - 1 == i) {
                     System.out.println("\n---\nThank you for choosing the " + arrList.get(i) + "! Safe Travels!\n---");
+                    //new Math().rentedTotal(selection - 1);
                     rented.add(arrList.get(i));
                     arrList.remove(i);
                     run();
+                }
+                else{
+                    System.out.println("Current selection is not an option. Please try again.");
                 }
 
             }
 
         }
-
-            subMenu();
+           subMenu();
     }
 
     private void subMenu() {
@@ -53,11 +55,8 @@ public class Menu {
             System.out.println("\n---\nAlrighty! Restarting the program!\n---");
             start();
         } else {
-            System.out.println("\n---\nAlrighty! Exiting the program. Please come again!\n---");
-
-
+            new CLI().exit();
         }
-
     }
 
 }
