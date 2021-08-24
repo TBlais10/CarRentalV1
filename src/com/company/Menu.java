@@ -33,25 +33,32 @@ public class Menu {
                     rentedTotal(i); //For asking customer how long they wish to rent the car for and what the total cost will be.
                     rented.add(arrList.get(i));
                     arrList.remove(i);
-                    run();
+                    subMenu();
                 }
-
             }
-
         }
-           subMenu();
     }
 
     private void subMenu() {
         System.out.println("\nThank you for choosing Taylor's Car Rental Service! What would you like to do from this point?");
         System.out.println("1) Restart this program and refresh the lot");
-        System.out.println("2) Exit the program");
-        int selection = userInput.getInt(1, 2);
+        System.out.println("2) Return to the menu for another rental.");
+        System.out.println("3) Exit the program");
+        int selection = userInput.getInt(1, 3);
 
         if (selection == 1) {
             System.out.println("\n---\nAlrighty! Restarting the program!\n---");
+            if (arrList.size() != 0){
+                System.out.println("\n---\nThe list still has cars remaining! Please empty the list before restarting.\n---\n");
+                run();
+            }
+            else {
             start();
-        } else {
+            }
+        } else if(selection == 2){
+            System.out.println("\n---\nAlrighty! Returning to the main menu.\n---");
+        }
+        else {
             new CLI().exit();
         }
     }
@@ -61,7 +68,7 @@ public class Menu {
         System.out.println("\n---\nThank you for choosing the " + arrList.get(i) + "! The price per day is " + arrList.get(i).getPrice() + ". How many days do you wish to rent it?\n---");
         int input = userInput.getInt();
         int total = input * arrList.get(i).getPrice();
-        System.out.println("\n---\n For a " + input + " day rental the " + arrList.get(i) + "will cost a total of "  + total + "! Safe Travels!\n---");
+        System.out.println("\n---\n For a " + input + " day rental the " + arrList.get(i) + " will cost a total of "  + total + "! Safe Travels!\n---");
 
     }
 

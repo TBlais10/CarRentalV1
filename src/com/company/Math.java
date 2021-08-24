@@ -8,7 +8,4 @@ public class Math {
     ArrayList<Car> arrList = inv.getCarsAval();
     CLI userInput = new CLI();
 
-
-
-
 }

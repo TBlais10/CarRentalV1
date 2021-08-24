@@ -14,7 +14,7 @@ public class CLI {
             int input = scanner.nextInt();
             //String asdf = blarg[1]; //This is a test for error messages
             if (input > max || input < min) {
-                System.out.println("Input is out of range! Please try again.");
+                System.out.println("Input is out of range! Please try again with a number between " + min + " and " + max + ".");
                 return getInt(min, max);
             }
             return input;
@@ -29,17 +29,16 @@ public class CLI {
         }
     }
 
-    public void exit() {
-        System.out.println("\n---\nAlrighty! Exiting the program. Please come again!\n---");
-        System.exit(0);
-    }
-
     public int getInt() {
         System.out.print("Input: ");
         int input = scanner.nextInt();
         return input;
     }
 
+    public void exit() {
+        System.out.println("\n---\nAlrighty! Exiting the program. Please come again!\n---");
+        System.exit(0);
+    }
 
     public String getString(String input) {
         try {
