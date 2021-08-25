@@ -113,4 +113,9 @@ ArrayList named rented
 ArrayList named inInventory
 
 when is empty...start the menu.
+
+----
+version 2 notes!!!
+
+
 * */

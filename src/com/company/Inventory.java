@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 public class Inventory {
 
-    private ArrayList<Car> carsAval = new ArrayList<>();
+    public ArrayList<Car> carsAval = new ArrayList<>();
 
-    private ArrayList<Car> rentedCars = new ArrayList<>();
+    public ArrayList<Car> rentedCars = new ArrayList<>();
 
     public void initializeCars() {
         Car car1 = new Car("Jeep", "Renegade", "Black", 250, false);
