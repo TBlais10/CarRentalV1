@@ -32,6 +32,14 @@ public class Inventory {
         }
     }
 
+    public void showRentedMenu() {
+        System.out.println("Welcome back! Which car would you like to return?");
+        for (int i = 0; i < rentedCars.size(); i++){
+            System.out.println(i + 1 + ") 2" +
+                    "" + rentedCars.get(i));
+        }
+    }
+
     public ArrayList<Car> getCarsAval() {
         return carsAval;
     }

@@ -40,23 +40,22 @@ public class CLI {
         System.exit(0);
     }
 
-    public String getString(String input) {
+    public String getString(int min, int max) {
         try {
             System.out.print("Input: ");
             String userInput = scanner.nextLine().trim();
 
-            if (userInput == " ") {System.out.println("Your input cannot be empty! Please try again.");
-            return getString(input);
-            }
-            return input;
+            if (userStringCheck(min, max, userInput)) return getString(min, max);
+            return userInput;
+
         } catch (InputMismatchException exception) {
             System.out.println("Incorrect input! Please provide a word or phrase and try again.");
             scanner.nextLine();
-            return getString(input);
+            return getString(min, max);
         } catch (Exception exception) {
             System.out.println("An unknown error appeared.");
             scanner.nextLine();
-            return getString(input);
+            return getString(min, max);
         }
     }
 
@@ -65,4 +64,18 @@ public class CLI {
         return input;
     }
 
+    private boolean userStringCheck(int min, int max, String userInput) {
+        if (userInput == " ") {System.out.println("Your input cannot be empty! Please try again.");
+            return true;
+        }
+        else if (userInput.length() < min){
+            System.out.println("You cannot have less than " + min + " characters! Please try again");
+            return true;
+        }
+        else if (userInput.length() > max) {
+            System.out.println("You have exceeded the character limit of " + max + " by " + (userInput.length() - max) + "! Please try again.");
+            return true;
+        }
+        return false;
+    }
 }

@@ -37,11 +37,7 @@ public class Menu {
     public void renting() {
 
         while (arrList.size() != 0) {
-
-            System.out.println("\nThis is our current selection of rental cars:");
-            for (int i = 0; i < arrList.size(); i++) { //Loops thru the carsAval to take advantage of creating the list of cars and will change as the arraylist changes.
-                System.out.println(i + 1 + ") " + arrList.get(i));
-            }
+            inv.showMenu();  //Loops thru the carsAval to take advantage of creating the list of cars and will change as the arraylist changes. Seen in Inventory Class
 
             System.out.println("Please choose the car you wish to rent!");
             int selection = userInput.getInt(1, arrList.size());
@@ -59,11 +55,14 @@ public class Menu {
     }
 
     private void returnCar() {
+        if (rented.size() == 0){
+            System.out.println("\n---\nWe have no cars out for rent! Returning to main menu...\n---2" +
+                    "");
+            run();
+        }
+
         while (rented.size() != 0){
-            System.out.println("Welcome back! Which car would you like to return?");
-            for (int i = 0; i < rented.size(); i++){
-                System.out.println(i + 1 + ")" + rented.get(i));
-            }
+            inv.showRentedMenu(); //Loops thru the rentedCars to take advantage of creating the list of cars and will change as the arraylist changes. Seen in Inventory Class
 
             System.out.print("\nInput:");
             int selection = userInput.getInt(1, rented.size());
