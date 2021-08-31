@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Math {
 
-    Inventory inv = new Inventory();
+    DataBase inv = new DataBase();
     ArrayList<Car> arrList = inv.getCarsAval();
     CLI userInput = new CLI();
 

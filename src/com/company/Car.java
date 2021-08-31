@@ -4,14 +4,18 @@ public class Car {
     private final String name;
     private final String color;
     private final int price;
-    private boolean isRented;
+    private final boolean rented;
+    private String renterName = "";
+    private int totalCost;
 
 
-    public Car(String name, String color, int price, boolean isRented) {
+    public Car(String name, String color, int price, boolean rented, String renterName, int totalCost) {
         this.name = name;
         this.color = color;
         this.price = price;
-        this.isRented = isRented;
+        this.rented = rented;
+        this.renterName = renterName;
+        this.totalCost = totalCost;
     }
 
     public String getName() {
@@ -31,11 +35,27 @@ public class Car {
     }
 
     public boolean isRented() {
-        return isRented;
+        return rented;
     }
 
     public void setRented(boolean rented) {
-        isRented = rented;
+        rented = rented;
+    }
+
+    public String getRenterName() {
+        return renterName;
+    }
+
+    public void setRenterName(String renterName) {
+        this.renterName = renterName;
+    }
+
+    public int getTotalCost() {
+        return totalCost;
+    }
+
+    public void setTotalCost(int totalCost) {
+        this.totalCost = totalCost;
     }
 
 //    @Override

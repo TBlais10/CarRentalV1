@@ -2,26 +2,29 @@ package com.company;
 
 import java.util.ArrayList;
 
-public class Inventory {
+public class DataBase {
 
-    public ArrayList<Car> carsAval = new ArrayList<>();
+    private ArrayList<Car> carsAval = new ArrayList<>();
 
-    public ArrayList<Car> rentedCars = new ArrayList<>();
+    private ArrayList<Car> rentedCars = new ArrayList<>();
+
+
+    public ArrayList<User> allUsers;
 
     public void initializeCars() {
-        Car car1 = new Car("Jeep Renegade", "Black", 250, false);
+        Car car1 = new Car("Jeep Renegade", "Black", 250, false, "",0);
         carsAval.add(car1);
 
-        Car car2 = new Car("Ford Mustang", "Red", 400, false);
+        Car car2 = new Car("Ford Mustang", "Red", 400, false, "",0);
         carsAval.add(car2);
 
-        Car car3 = new Car("Dodge Charger", "Grey", 400, false);
+        Car car3 = new Car("Dodge Charger", "Grey", 400, false, "",0);
         carsAval.add(car3);
 
-        Car car4 = new Car("Chevy Cruz", "Yellow", 300, false);
+        Car car4 = new Car("Chevy Cruz", "Yellow", 300, false, "", 0);
         carsAval.add(car4);
 
-        Car car5 = new Car("VW Van Jetta", "Blue", 275, false);
+        Car car5 = new Car("VW Van Jetta", "Blue", 275, false, "", 0);
         carsAval.add(car5);
     }
 
@@ -46,5 +49,13 @@ public class Inventory {
 
     public ArrayList<Car> getRentedCars() {
         return rentedCars;
+    }
+
+    public ArrayList<User> getAllUsers() {
+        return allUsers;
+    }
+
+    public void setAllUsers(ArrayList<User> allUsers) {
+        this.allUsers = allUsers;
     }
 }

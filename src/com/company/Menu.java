@@ -4,16 +4,57 @@ import java.util.ArrayList;
 
 public class Menu {
 
-    Inventory inv = new Inventory(); //To only initialize an instance of Inventory once.
-    ArrayList<Car> arrList = inv.getCarsAval();
+    DataBase data = new DataBase(); //To only initialize an instance of Inventory once.
+    ArrayList<Car> arrList = data.getCarsAval();
+    ArrayList<Car> rented = data.getRentedCars();
+    ArrayList<User> users = data.getAllUsers();
     CLI userInput = new CLI(); //To only initialize an instance of CLI once.
-    ArrayList<Car> rented = inv.getRentedCars();
 
     public void start() {//Introduces the program and populates carsAval arraylist.
         System.out.println("Welcome to Taylor's Car Rental Service!");
-        inv.initializeCars();
-        run();
-    }
+        data.initializeCars();
+        System.out.println("Do you have an account with us? Y/N");
+        String input = userInput.getString();
+        accountCheck(input);
+    } //Starts w/ an account check
+
+    private void accountCheck(String input) {
+        if (input.substring(0, 1).equalsIgnoreCase("Y")) {
+            System.out.println("\n---\nWhat is your username and password?\n---");
+            System.out.print("Username ");
+            String username = userInput.getString();
+
+            System.out.println("Password ");
+            String password = userInput.getString();
+
+            for (User user : users) {
+                if (username.equals(user.getUsername()) && password.equals(user.getPassword())) {
+                    System.out.println("Welcome back " + username);
+                    run();
+                } else {
+                    System.out.println("The username or password is incorrect. Please try again");
+                    accountCheck(input);//method call for login
+                }
+            }
+
+        } else {
+            //createUser method
+            createNewUser();
+        }
+    } //Contains login and method to create a new user.
+
+    private void createNewUser() {
+        System.out.println("\n---\nOk! Lets create a new user for you!");
+
+        System.out.println("Create your username!");
+        String username = userInput.getString();
+
+        System.out.println("Now your password! Should contain a minimum of 8 characters and no more than 30 characters.");
+        String password = userInput.getString(8, 30);
+
+        User newUser = new User(username, password); //issue coming up here - nullpointexception
+        data.getAllUsers().add(newUser); //add to Arraylist
+    } //creates a new user
 
     public void run() {//The main menu of the program.
         System.out.println("\n---\nWe have a total of " + arrList.size() + " cars available for rent and we have " + rented.size() + " cars currently being rented.");
@@ -24,70 +65,133 @@ public class Menu {
 
         int input = userInput.getInt(1, 3);
 
-        if (input == 1){
+        if (input == 1) {
             renting();
-        }
-        else if (input == 2){
+        } else if (input == 2) {
             returnCar();
-        }else {
+        } else {
             new CLI().exit();
         }
-    }
+    } //runs the main menu of the program.
 
     public void renting() {
 
         while (arrList.size() != 0) {
-            inv.showMenu();  //Loops thru the carsAval to take advantage of creating the list of cars and will change as the arraylist changes. Seen in Inventory Class
+            data.showMenu();  //Loops thru the carsAval to take advantage of creating the list of cars and will change as the arraylist changes. Seen in Inventory Class
 
             System.out.println("Please choose the car you wish to rent!");
             int selection = userInput.getInt(1, arrList.size());
 
-            for (int i = 0; i < arrList.size(); i++) {
-                if (selection - 1 == i) {
-                    //System.out.println("\n---\nThank you for choosing the " + arrList.get(i) + "! Safe Travels!\n---");
-                    rentedTotal(i); //For asking customer how long they wish to rent the car for and what the total cost will be.
-                    rented.add(arrList.get(i));
-                    arrList.remove(i);
-                    subMenu();
-                }
-            }
+            confirmRental(selection);
         }
-    }
+    } //The main cor rental menu
 
     private void returnCar() {
-        if (rented.size() == 0){
+        if (rented.size() == 0) {
             System.out.println("\n---\nWe have no cars out for rent! Returning to main menu...\n---2" +
                     "");
             run();
         }
 
-        while (rented.size() != 0){
-            inv.showRentedMenu(); //Loops thru the rentedCars to take advantage of creating the list of cars and will change as the arraylist changes. Seen in Inventory Class
-
+        while (rented.size() != 0) {
+            data.showRentedMenu(); //Loops thru the rentedCars to take advantage of creating the list of cars and will change as the arraylist changes. Seen in Inventory Class
             System.out.print("\nInput:");
             int selection = userInput.getInt(1, rented.size());
 
-            for (int i = 0; i < rented.size(); i++){
-                if (selection - 1 == i){
-                    System.out.println("\n---\nAlrighty! Thank you for returning the " + rented.get(i) + "! We hope to see you again.\n---");
-                    arrList.add(rented.get(i));
-                    rented.remove(i);
-                    subMenu();
-                }
-            }
+            confirmReturn(selection);
         }
         //System.out.println("\nWelcome back loyal customer! Help us to find you in our system! What is your name?");
         //Ask to check thru the User class' arraylists and check for the user.
         //if they find a matching name, ask to confirm if that is their account.
         //confirm which car they wish to return. Use a for loop to go thru the list of cars, then on a yes add that car back to the carsAval list.
 
-    }
+    } //The main return car menu
+
+    private void confirmRental(int selection) {
+        for (int i = 0; i < arrList.size(); i++) {
+            if (selection - 1 == i) {
+                System.out.println("\n---\nDo you want to rent the " + arrList.get(i).getDetails() + "? Y/N?\n---"); //To confirm w/ the user that this is the car they wanted.
+                userInput.scanner.nextLine();
+                String input = userInput.getString(1, 3);
+                String trimmedInput = input.substring(0, 1).toUpperCase();
+                checkingUserRentalInput(i, trimmedInput);
+
+            }
+        }
+    } //Checks w/ user if they wish to stick w/ the rental option they choose.
+
+    private void checkingUserRentalInput(int i, String trimmedInput) {
+        if (trimmedInput.equals("Y")) {
+            System.out.println("Alrighty! You have confirmed the rental of the " + arrList.get(i).getDetails() + "! What name will the rental be listed under?");
+            String name = userInput.getString();//Adds the user name to the object before changing arrays
+            arrList.get(i).setRenterName(name);
+            arrList.get(i).setRented(true); //Sets boolean to true
+            rentedTotal(i); //For asking customer how long they wish to rent the car for and what the total cost will be.
+            rented.add(arrList.get(i));
+            arrList.remove(i);
+            subMenu();
+        } else if (trimmedInput.equals("N")) {
+            System.out.println("\n---\nOK! What would you like to do from here?\n1) Return to the rental menu\n2) Return to the main menu \n---");
+            int input = userInput.getInt(1, 2);
+            userRentalRetry(input);
+        }
+    } //Checking the user input given from confirmRental
+
+    private void userRentalRetry(int input) {
+        if (input == 1) {
+            System.out.println("\n...returning to rented menu");
+            renting();
+        } else {
+            System.out.println("\n---\nAlrighty! Returning to main menu.\n---");
+            run();
+        }
+    } //If the user does not want to rent the car in question, asks if they want to return to rental or main menu.
+
+    private void confirmReturn(int selection) { //
+        for (int i = 0; i < rented.size(); i++) {
+            if (selection - 1 == i) {
+                System.out.println("\n---\nAlrighty! You want to return the " + rented.get(i).getDetails() + "! What was the name under that rental?\n---");
+                userInput.scanner.nextLine();
+
+                String name = userInput.getString();
+                checkingUserReturnInput(selection, i, name);
+
+            }
+
+        }
+    } //Checks w/ user if they wish to stick w/ the rental option the choose.
+
+    private void checkingUserReturnInput(int selection, int i, String name) {
+        if (name.equals(rented.get(i).getRenterName())) {
+            System.out.println("\n---\nThank you " + rented.get(i).getRenterName() + "! Your total rental costs comes to $" + rented.get(i).getTotalCost() + ". We hope you have a great day!\n---");
+            rented.get(i).setRenterName("");
+            rented.get(i).setRented(false);
+            rented.get(i).setTotalCost(0);
+            arrList.add(rented.get(i));
+            rented.remove(i);
+            subMenu();
+        } else {
+            System.out.println("Oops! That name does not match our records. Do you want to...\n1)Try again\n2)Return to the rented menu?");
+            int input = userInput.getInt(1, 2);
+            userReturnRetry(selection, input);
+        }
+    } //Checking the user input from confirmReturn
+
+    private void userReturnRetry(int selection, int input) {
+        if (input == 1) {
+            System.out.println("\n...returning to prompt...");
+            confirmReturn(selection);
+        } else {
+            System.out.println("\n---\nAlrighty! Returning to return menu.\n---");
+            returnCar();
+        }
+    } //The options for the retry options in else statement of checkingUserReturnInput
 
     private void subMenu() {
         subMenuDialogue();
         int selection = userInput.getInt(1, 5);
         userSelection(selection);
-    }
+    } //Once the user is done w/ a menu option, will appear and ask them if there is another part of the program they wish to work inside.
 
     private void subMenuDialogue() {
         System.out.println("\nThank you for choosing Taylor's Car Rental Service! What would you like to do from this point?");
@@ -96,7 +200,7 @@ public class Menu {
         System.out.println("3) Go to the rental menu to rent a car.");
         System.out.println("4) Go to the return menu to return a car.");
         System.out.println("5) Exit the program");
-    }
+    } //The menu options for the sub menu
 
     private void userSelection(int selection) {
         if (selection == 1) {
@@ -104,26 +208,27 @@ public class Menu {
             arrList.clear();
             rented.clear();
             start();
-        }else if(selection == 2){
+        } else if (selection == 2) {
             System.out.println("\n---\nAlrighty! Returning to the main menu.\n---");
             run();
-        }
-        else if (selection == 3){System.out.println("\n---\nAlrighty! Sending you to the rental menu.\n---");
+        } else if (selection == 3) {
+            System.out.println("\n---\nAlrighty! Sending you to the rental menu.\n---");
             renting();
-        }
-        else if (selection == 4){System.out.println("\n---\nAlrighty! Sending you to the return menu.\n---");
+        } else if (selection == 4) {
+            System.out.println("\n---\nAlrighty! Sending you to the return menu.\n---");
             returnCar();
-        }else {
+        } else {
             new CLI().exit();
         }
     } //the if else blocks for the sub menu options.
 
-    private void rentedTotal(int i){
+    private void rentedTotal(int i) {
         System.out.println(i);
         System.out.println("\n---\nThank you for choosing the " + arrList.get(i).getDetails() + "! The price per day is " + arrList.get(i).getPrice() + ". How many days do you wish to rent it?\n---");
         int input = userInput.getInt();
         int total = input * arrList.get(i).getPrice();
-        System.out.println("\n---\n For a " + input + " day rental the " + arrList.get(i).getDetails() + " will cost a total of $"  + total + "! Safe Travels!\n---");
+        System.out.println("\n---\n For a " + input + " day rental the " + arrList.get(i).getDetails() + " will cost a total of $" + total + "! Safe Travels!\n---");
+        arrList.get(i).setTotalCost(total);
 
     } //a quick program that will give the user the total of the rental per days they wish to rent for.
 }

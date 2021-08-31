@@ -60,7 +60,12 @@ public class CLI {
     }
 
     public String getString() {
-        String input = scanner.nextLine();
+        System.out.print("Input: ");
+        String input = scanner.nextLine().trim();
+        if (input.length() == 0) {
+            System.out.println("The text box cannot be empty! Please try again.");
+            return getString();
+        }
         return input;
     }
 
