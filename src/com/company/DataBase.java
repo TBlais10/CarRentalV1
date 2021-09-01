@@ -8,10 +8,9 @@ public class DataBase {
 
     private ArrayList<Car> rentedCars = new ArrayList<>();
 
+    public ArrayList<User> allUsers = new ArrayList<>();
 
-    public ArrayList<User> allUsers;
-
-    public void initializeCars() {
+    public void initializeDataBase() {
         Car car1 = new Car("Jeep Renegade", "Black", 250, false, "",0);
         carsAval.add(car1);
 
@@ -26,6 +25,9 @@ public class DataBase {
 
         Car car5 = new Car("VW Van Jetta", "Blue", 275, false, "", 0);
         carsAval.add(car5);
+
+        User admin = new User("Admin", "swordfish");
+        allUsers.add(admin);
     }
 
     public void showMenu() {//possibly cutting down on the code needed in other classes.
@@ -53,9 +55,5 @@ public class DataBase {
 
     public ArrayList<User> getAllUsers() {
         return allUsers;
-    }
-
-    public void setAllUsers(ArrayList<User> allUsers) {
-        this.allUsers = allUsers;
     }
 }

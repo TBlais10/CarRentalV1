@@ -7,41 +7,54 @@ public class Menu {
     DataBase data = new DataBase(); //To only initialize an instance of Inventory once.
     ArrayList<Car> arrList = data.getCarsAval();
     ArrayList<Car> rented = data.getRentedCars();
-    ArrayList<User> users = data.getAllUsers();
+    ArrayList<User> users = data.allUsers;
     CLI userInput = new CLI(); //To only initialize an instance of CLI once.
 
     public void start() {//Introduces the program and populates carsAval arraylist.
         System.out.println("Welcome to Taylor's Car Rental Service!");
-        data.initializeCars();
-        System.out.println("Do you have an account with us? Y/N");
-        String input = userInput.getString();
-        accountCheck(input);
+        data.initializeDataBase();
+        loginMenu();
     } //Starts w/ an account check
 
-    private void accountCheck(String input) {
+    private void loginMenu() {
+        System.out.println("Do you have an account with us? Y/N");
+        System.out.println("Or would you like to exit the program? If so, type 'exit'.");
+        String input = userInput.getString();
+        loginMenuCheck(input);
+    } //Split from start so start prompt does not always need to be accessed for logging in.
+
+    private void loginMenuCheck(String input) {
         if (input.substring(0, 1).equalsIgnoreCase("Y")) {
             System.out.println("\n---\nWhat is your username and password?\n---");
             System.out.print("Username ");
             String username = userInput.getString();
 
-            System.out.println("Password ");
+            System.out.print("Password ");
             String password = userInput.getString();
 
+            //System.out.println(data.allUsers.size() + " - Calling data.allUsers");
+            //System.out.println(users.size() + " - Calling users");
             for (User user : users) {
+                //System.out.println(user.getUsername() + "-" + user.getPassword() + "-" + username + "-" + password);
+
                 if (username.equals(user.getUsername()) && password.equals(user.getPassword())) {
-                    System.out.println("Welcome back " + username);
+                    System.out.println("\n---\nWelcome back " + username + "\n---");
                     run();
-                } else {
-                    System.out.println("The username or password is incorrect. Please try again");
-                    accountCheck(input);//method call for login
                 }
             }
+            System.out.println("The username or password is incorrect. Please try again");
+            loginMenuCheck(input);//method call for login
 
-        } else {
+        }  else if (input.substring(0, 1).equalsIgnoreCase("N")){
             //createUser method
             createNewUser();
+        }else if (input.substring(0, 1).equalsIgnoreCase("E")) {
+            userInput.exit();
+        }else {
+            System.out.println("Incorrect input! Please try again.");
+            loginMenu();
         }
-    } //Contains login and method to create a new user.
+    } //Contains login and method to create a new user....move to a new class.
 
     private void createNewUser() {
         System.out.println("\n---\nOk! Lets create a new user for you!");
@@ -49,27 +62,37 @@ public class Menu {
         System.out.println("Create your username!");
         String username = userInput.getString();
 
-        System.out.println("Now your password! Should contain a minimum of 8 characters and no more than 30 characters.");
-        String password = userInput.getString(8, 30);
+        System.out.println("Now your password! Should contain a minimum of 8 characters and no more than 20 characters.");
+        String password = userInput.getString(8, 20);
 
         User newUser = new User(username, password); //issue coming up here - nullpointexception
-        data.getAllUsers().add(newUser); //add to Arraylist
-    } //creates a new user
+        data.allUsers.add(newUser); //add to Arraylist <-- issue is here...is the data not being added to the arraylist? I think so
+        System.out.println(users.get(1).getUsername()); //tests to make sure the new data was added to arraylist
+        System.out.println(users.get(1).getPassword()); //tests to make sure the new data was added to arraylist
+
+        System.out.println("\n---\nWelcome " + username + "! Thank you for creating an account with us! Please log in to use our program.\n---");
+        loginMenu();
+    } //creates a new user...move to CLI class?
 
     public void run() {//The main menu of the program.
         System.out.println("\n---\nWe have a total of " + arrList.size() + " cars available for rent and we have " + rented.size() + " cars currently being rented.");
         System.out.println("\nChoose from the following menu options:");
         System.out.println("1) Rent a car");
         System.out.println("2) Return a car");
-        System.out.println("3) Exit the program");
+        System.out.println("3) Log out");
+        System.out.println("4) Exit the program");
 
-        int input = userInput.getInt(1, 3);
+        int input = userInput.getInt(1, 4);
 
         if (input == 1) {
             renting();
         } else if (input == 2) {
             returnCar();
-        } else {
+        } else if (input == 3) {
+            System.out.println("\n---\nLogging out! Please come again\n---");
+            loginMenu();
+        }
+        else {
             new CLI().exit();
         }
     } //runs the main menu of the program.
