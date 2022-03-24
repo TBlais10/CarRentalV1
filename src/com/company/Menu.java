@@ -42,15 +42,20 @@ public class Menu {
                     run();
                 }
             }
-            System.out.println("The username or password is incorrect. Please try again");
-            loginMenuCheck(input);//method call for login
+            System.out.println("The username or password is incorrect. Would you like to try again? Y/N");
+            String answer = userInput.getString();
+            if (answer.substring(0, 1).equalsIgnoreCase("y")) {
+                loginMenuCheck(input);//method call for login
+            } else {
+                loginMenu();
+            }
 
-        }  else if (input.substring(0, 1).equalsIgnoreCase("N")){
+        } else if (input.substring(0, 1).equalsIgnoreCase("N")) {
             //createUser method
             createNewUser();
-        }else if (input.substring(0, 1).equalsIgnoreCase("E")) {
+        } else if (input.substring(0, 1).equalsIgnoreCase("E")) {
             userInput.exit();
-        }else {
+        } else {
             System.out.println("Incorrect input! Please try again.");
             loginMenu();
         }
@@ -91,8 +96,7 @@ public class Menu {
         } else if (input == 3) {
             System.out.println("\n---\nLogging out! Please come again\n---");
             loginMenu();
-        }
-        else {
+        } else {
             new CLI().exit();
         }
     } //runs the main menu of the program.
@@ -248,7 +252,7 @@ public class Menu {
     private void rentedTotal(int i) {
         System.out.println(i);
         System.out.println("\n---\nThank you for choosing the " + arrList.get(i).getDetails() + "! The price per day is " + arrList.get(i).getPrice() + ". How many days do you wish to rent it?\n---");
-        int input = userInput.getInt();
+        int input = userInput.getInt(1, 30);
         int total = input * arrList.get(i).getPrice();
         System.out.println("\n---\n For a " + input + " day rental the " + arrList.get(i).getDetails() + " will cost a total of $" + total + "! Safe Travels!\n---");
         arrList.get(i).setTotalCost(total);
