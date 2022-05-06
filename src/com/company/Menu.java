@@ -8,7 +8,6 @@ public class Menu {
     ArrayList<Car> arrList = data.getCarsAval();
     ArrayList<Car> rented = data.getRentedCars();
     ArrayList<User> users = data.allUsers;
-    CLI userInput = new CLI(); //To only initialize an instance of CLI once.
 
     public void start() {//Introduces the program and populates carsAval arraylist.
         System.out.println("Welcome to Taylor's Car Rental Service!");
@@ -19,7 +18,7 @@ public class Menu {
     private void loginMenu() {
         System.out.println("Do you have an account with us? Y/N");
         System.out.println("Or would you like to exit the program? If so, type 'exit'.");
-        String input = userInput.getString();
+        String input = CLI.getString();
         loginMenuCheck(input);
     } //Split from start so start prompt does not always need to be accessed for logging in.
 
@@ -27,10 +26,10 @@ public class Menu {
         if (input.substring(0, 1).equalsIgnoreCase("Y")) {
             System.out.println("\n---\nWhat is your username and password?\n---");
             System.out.print("Username ");
-            String username = userInput.getString();
+            String username = CLI.getString();
 
             System.out.print("Password ");
-            String password = userInput.getString();
+            String password = CLI.getString();
 
             //System.out.println(data.allUsers.size() + " - Calling data.allUsers");
             //System.out.println(users.size() + " - Calling users");
@@ -43,7 +42,7 @@ public class Menu {
                 }
             }
             System.out.println("The username or password is incorrect. Would you like to try again? Y/N");
-            String answer = userInput.getString();
+            String answer = CLI.getString();
             if (answer.substring(0, 1).equalsIgnoreCase("y")) {
                 loginMenuCheck(input);//method call for login
             } else {
@@ -54,7 +53,7 @@ public class Menu {
             //createUser method
             createNewUser();
         } else if (input.substring(0, 1).equalsIgnoreCase("E")) {
-            userInput.exit();
+            CLI.exit();
         } else {
             System.out.println("Incorrect input! Please try again.");
             loginMenu();
@@ -65,10 +64,10 @@ public class Menu {
         System.out.println("\n---\nOk! Lets create a new user for you!");
 
         System.out.println("Create your username!");
-        String username = userInput.getString();
+        String username = CLI.getString();
 
         System.out.println("Now your password! Should contain a minimum of 8 characters and no more than 20 characters.");
-        String password = userInput.getString(8, 20);
+        String password = CLI.getString(8, 20);
 
         User newUser = new User(username, password); //issue coming up here - nullpointexception
         data.allUsers.add(newUser); //add to Arraylist <-- issue is here...is the data not being added to the arraylist? I think so
@@ -87,7 +86,7 @@ public class Menu {
         System.out.println("3) Log out");
         System.out.println("4) Exit the program");
 
-        int input = userInput.getInt(1, 4);
+        int input = CLI.getInt(1, 4);
 
         if (input == 1) {
             renting();
@@ -107,7 +106,7 @@ public class Menu {
             data.showMenu();  //Loops thru the carsAval to take advantage of creating the list of cars and will change as the arraylist changes. Seen in Inventory Class
 
             System.out.println("Please choose the car you wish to rent!");
-            int selection = userInput.getInt(1, arrList.size());
+            int selection = CLI.getInt(1, arrList.size());
 
             confirmRental(selection);
         }
@@ -123,7 +122,7 @@ public class Menu {
         while (rented.size() != 0) {
             data.showRentedMenu(); //Loops thru the rentedCars to take advantage of creating the list of cars and will change as the arraylist changes. Seen in Inventory Class
             System.out.print("\nInput:");
-            int selection = userInput.getInt(1, rented.size());
+            int selection = CLI.getInt(1, rented.size());
 
             confirmReturn(selection);
         }
@@ -138,8 +137,8 @@ public class Menu {
         for (int i = 0; i < arrList.size(); i++) {
             if (selection - 1 == i) {
                 System.out.println("\n---\nDo you want to rent the " + arrList.get(i).getDetails() + "? Y/N?\n---"); //To confirm w/ the user that this is the car they wanted.
-                userInput.scanner.nextLine();
-                String input = userInput.getString(1, 3);
+                CLI.scanner.nextLine();
+                String input = CLI.getString(1, 3);
                 String trimmedInput = input.substring(0, 1).toUpperCase();
                 checkingUserRentalInput(i, trimmedInput);
 
@@ -150,7 +149,7 @@ public class Menu {
     private void checkingUserRentalInput(int i, String trimmedInput) {
         if (trimmedInput.equals("Y")) {
             System.out.println("Alrighty! You have confirmed the rental of the " + arrList.get(i).getDetails() + "! What name will the rental be listed under?");
-            String name = userInput.getString();//Adds the user name to the object before changing arrays
+            String name = CLI.getString();//Adds the user name to the object before changing arrays
             arrList.get(i).setRenterName(name);
             arrList.get(i).setRented(true); //Sets boolean to true
             rentedTotal(i); //For asking customer how long they wish to rent the car for and what the total cost will be.
@@ -159,7 +158,7 @@ public class Menu {
             subMenu();
         } else if (trimmedInput.equals("N")) {
             System.out.println("\n---\nOK! What would you like to do from here?\n1) Return to the rental menu\n2) Return to the main menu \n---");
-            int input = userInput.getInt(1, 2);
+            int input = CLI.getInt(1, 2);
             userRentalRetry(input);
         }
     } //Checking the user input given from confirmRental
@@ -178,9 +177,9 @@ public class Menu {
         for (int i = 0; i < rented.size(); i++) {
             if (selection - 1 == i) {
                 System.out.println("\n---\nAlrighty! You want to return the " + rented.get(i).getDetails() + "! What was the name under that rental?\n---");
-                userInput.scanner.nextLine();
+                CLI.scanner.nextLine();
 
-                String name = userInput.getString();
+                String name = CLI.getString();
                 checkingUserReturnInput(selection, i, name);
 
             }
@@ -199,7 +198,7 @@ public class Menu {
             subMenu();
         } else {
             System.out.println("Oops! That name does not match our records. Do you want to...\n1)Try again\n2)Return to the rented menu?");
-            int input = userInput.getInt(1, 2);
+            int input = CLI.getInt(1, 2);
             userReturnRetry(selection, input);
         }
     } //Checking the user input from confirmReturn
@@ -216,7 +215,7 @@ public class Menu {
 
     private void subMenu() {
         subMenuDialogue();
-        int selection = userInput.getInt(1, 5);
+        int selection = CLI.getInt(1, 5);
         userSelection(selection);
     } //Once the user is done w/ a menu option, will appear and ask them if there is another part of the program they wish to work inside.
 
@@ -252,7 +251,7 @@ public class Menu {
     private void rentedTotal(int i) {
         System.out.println(i);
         System.out.println("\n---\nThank you for choosing the " + arrList.get(i).getDetails() + "! The price per day is " + arrList.get(i).getPrice() + ". How many days do you wish to rent it?\n---");
-        int input = userInput.getInt(1, 30);
+        int input = CLI.getInt(1, 30);
         int total = input * arrList.get(i).getPrice();
         System.out.println("\n---\n For a " + input + " day rental the " + arrList.get(i).getDetails() + " will cost a total of $" + total + "! Safe Travels!\n---");
         arrList.get(i).setTotalCost(total);

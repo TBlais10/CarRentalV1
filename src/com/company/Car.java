@@ -4,7 +4,7 @@ public class Car {
     private final String name;
     private final String color;
     private final int price;
-    private final boolean rented;
+    private boolean rented;
     private String renterName = "";
     private int totalCost;
 
@@ -39,7 +39,7 @@ public class Car {
     }
 
     public void setRented(boolean rented) {
-        rented = rented;
+        this.rented = rented;
     }
 
     public String getRenterName() {
@@ -58,15 +58,4 @@ public class Car {
         this.totalCost = totalCost;
     }
 
-//    @Override
-//    public String toString() {
-//
-//        NumberFormat currency = NumberFormat.getCurrencyInstance();
-//
-//        String output = "";
-//
-//        output += model + " " + name /*+ " - Price: " + currency.format(price) + " per day."*/; //commented code for later when working w/ price
-//
-//        return output;
-//    }
 }
